@@ -17,7 +17,7 @@
 
 ## 🌐 Live Demo
 
-👉 [Try Codify Live](https://ai-powered-code-reviewer-sage.vercel.app)
+👉 Try Codify Live: https://ai-powered-code-reviewer-sage.vercel.app
 
 ---
 
@@ -43,8 +43,8 @@ Codify/
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/codify.git
-cd codify
+git clone https://github.com/scriptbyayush/AI-Powered-Code-Reviewer.git
+cd AI-Powered-Code-Reviewer
 ```
 
 ### 2. Set Your API Key
@@ -100,9 +100,12 @@ npm start
 
 ## 🖼️ Screenshots
 
-> *(Include screenshots of the main UI, code suggestions, and output if available)*
+![Codify UI](./codify.png)
+
+> Screenshot of the Codify interface showing the Monaco Editor with AI-powered code suggestions.
 
 ---
+
 
 ## 🛡️ License
 
