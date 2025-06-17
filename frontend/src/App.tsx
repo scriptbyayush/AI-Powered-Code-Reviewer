@@ -75,10 +75,19 @@ function getInitialTheme() {
 
 function getInitialCode() {
   const params = new URLSearchParams(window.location.search);
-  if (params.get("code")) return decodeURIComponent(params.get("code")!);
+  const codeParam = params.get("code");
+  if (codeParam) {
+    try {
+      return decodeURIComponent(codeParam);
+    } catch (e) {
+      console.error("Malformed code param in URL", e);
+      return "// Paste your code here to analyze...";
+    }
+  }
   const saved = localStorage.getItem("lastCode");
   return saved || "// Paste your code here to analyze...";
 }
+
 
 function App() {
   // --- State ---
