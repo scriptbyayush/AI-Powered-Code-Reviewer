@@ -1,5 +1,5 @@
 {
-  "name": "codesight-ai-frontend",
+  "name": "codify-ai-frontend",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -8,6 +8,7 @@
     "@mui/icons-material": "^5.14.0",
     "@mui/material": "^5.14.0",
     "axios": "^1.4.0",
+    "framer-motion": "^12.18.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-markdown": "^8.0.7",

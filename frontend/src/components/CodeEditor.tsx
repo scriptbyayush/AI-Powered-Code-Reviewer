@@ -2,13 +2,28 @@ import React, { useRef } from "react";
 import { Box } from "@mui/material";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { dracula } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { coy } from "react-syntax-highlighter/dist/esm/styles/prism";
 
-interface CodeEditorProps {
+export interface CodeEditorProps {
   code: string;
   onChange: (code: string) => void;
+  theme?: string;
+  height?: number | string; // <-- Add height prop (optional)
 }
 
-const CodeEditor: React.FC<CodeEditorProps> = ({ code, onChange }) => {
+const themeMap: Record<string, any> = {
+  "vscDarkPlus": vscDarkPlus,
+  "dracula": dracula,
+  "coy": coy,
+};
+
+const CodeEditor: React.FC<CodeEditorProps> = ({
+  code,
+  onChange,
+  theme = "vscDarkPlus",
+  height = "100%", // default to 100% if not provided
+}) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const highlighterRef = useRef<HTMLDivElement>(null);
 
@@ -41,16 +56,11 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ code, onChange }) => {
 
       onChange(newCode);
 
-      // Set cursor position appropriately
-      // If text was selected, place cursor after the selection and closing pair
-      // If no text was selected, place cursor between the pairs
       setTimeout(() => {
         if (selectedText) {
-          // Place cursor after the selected text but before closing pair
           textarea.selectionStart = start + selectedText.length + 1;
           textarea.selectionEnd = start + selectedText.length + 1;
         } else {
-          // Place cursor between the pairs
           textarea.selectionStart = start + 1;
           textarea.selectionEnd = start + 1;
         }
@@ -69,7 +79,6 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ code, onChange }) => {
 
       onChange(newCode);
 
-      // Position cursor after the <
       setTimeout(() => {
         textarea.selectionStart = start + 1;
         textarea.selectionEnd = start + 1;
@@ -86,8 +95,15 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ code, onChange }) => {
     }
   };
 
+  // Pick the syntax highlighter theme based on prop
+  const syntaxTheme = themeMap[theme] || vscDarkPlus;
+
+  // Convert numeric height to px
+  const resolvedHeight =
+    typeof height === "number" ? `${height}px` : height || "100%";
+
   return (
-    <Box sx={{ height: "100%", position: "relative" }}>
+    <Box sx={{ height: resolvedHeight, position: "relative" }}>
       <textarea
         ref={textareaRef}
         value={code}
@@ -104,7 +120,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ code, onChange }) => {
           top: 0,
           left: 0,
           width: "100%",
-          height: "100%",
+          height: resolvedHeight,
           padding: "16px",
           background: "transparent",
           color: "transparent",
@@ -118,6 +134,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ code, onChange }) => {
           border: "none",
           outline: "none",
         }}
+        aria-label="Code editor"
       />
       <Box
         ref={highlighterRef}
@@ -126,7 +143,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ code, onChange }) => {
           top: 0,
           left: 0,
           width: "100%",
-          height: "100%",
+          height: resolvedHeight,
           padding: "0",
           pointerEvents: "none",
           zIndex: 1,
@@ -135,7 +152,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ code, onChange }) => {
       >
         <SyntaxHighlighter
           language="typescript"
-          style={vscDarkPlus}
+          style={syntaxTheme}
           customStyle={{
             margin: 0,
             padding: "16px",
@@ -143,6 +160,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ code, onChange }) => {
             fontSize: "14px",
             lineHeight: 1.5,
             fontFamily: '"Fira Code", Consolas, "Courier New", monospace',
+            height: resolvedHeight,
           }}
         >
           {code}
